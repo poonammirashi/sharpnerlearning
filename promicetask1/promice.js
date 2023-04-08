@@ -2,9 +2,9 @@ const posts = [{ title: 'post one', body: 'this is post one' }, { title: 'post t
 user={
     lastupdatetime : new Date()
 }
-console.log(`before updating time : ${user.lastupdatetime}`);
 
- function getposts() {
+
+const promice1= function getposts() {
      return new Promise((resolve,reject)=>{
         setTimeout(() => {
             posts.forEach((post)=>{
@@ -15,7 +15,7 @@ console.log(`before updating time : ${user.lastupdatetime}`);
     })
 }
 
-const promice1= function createpost(post) {
+const promice2= function createpost(post) {
     return new Promise((resolve,reject)=>{
         setTimeout(()=>{
             posts.push(post);
@@ -24,7 +24,7 @@ const promice1= function createpost(post) {
     });
 }
 
- function deletepost() {
+ const promice3 = function deletepost() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if (posts.length > 0) {
@@ -37,7 +37,7 @@ const promice1= function createpost(post) {
     });
 }
 
-let promice2= function updatelastuseractivity() {
+const promice4= function updatelastuseractivity() {
     return new Promise((resolve,reject)=>{
         setTimeout(()=>{
              user.lastupdatetime = new Date().getTime();
@@ -47,12 +47,16 @@ let promice2= function updatelastuseractivity() {
 }
 // promice2().then(p1=> console.log(p1));
 // createpost({ title:'post three'}).then(p2=> console.log(p2));
-Promise.all([promice1({ title:'post three', body:'this is post three'}),promice2()]).then(([p1,p2])=>{
-    getposts().then(()=>{
-        const time=p2/1000;
-    console.log(` after updating time: ${time}`);
-    deletepost().then(()=>{
-        getposts();
-    })
-    })
-})
+ const userupdate = async () => {
+    console.log(`before updating time : ${user.lastupdatetime}`);
+ let [post,update]= await  Promise.all([promice2({ title:'post three', body:'this is post three'}),promice4()])
+    console.log(` after updating time: ${update}`);
+    await promice1();
+    // console.log(posts);
+    let deletepost= await promice3();
+    console.log(deletepost)
+     await promice1();
+    // console.log(posts2);
+    
+    }
+    userupdate().then(()=> console.log('done'));
